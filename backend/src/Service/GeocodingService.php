@@ -7,6 +7,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GeocodingService
 {
+    const APIURL = 'https://api.mapbox.com/geocoding/v5/';
     const ENDPOINT = 'mapbox.places';
 
     private $apiGeocoding;
@@ -25,14 +26,10 @@ class GeocodingService
     /**
      * @param string $search address search for geocoding
      * @return array
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function getCoordinates($search) :array
     {
-        $geocodingUrl = 'https://api.mapbox.com/geocoding/v5/'.self::ENDPOINT.'/'.urlencode($search).'.json?access_token='.$this->apiGeocoding;
+        $geocodingUrl = self::APIURL.self::ENDPOINT.'/'.urlencode($search).'.json?access_token='.$this->apiGeocoding;
         $client = HttpClient::create();
         $response = $client->request('GET', $geocodingUrl);
 

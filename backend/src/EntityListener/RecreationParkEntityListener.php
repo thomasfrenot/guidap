@@ -16,9 +16,14 @@ class RecreationParkEntityListener
         $this->geocodingService = $geocodingService;
     }
 
+    /**
+     * Event played on RecreationPark creation
+     *
+     * @param RecreationPark $recreationPark
+     * @param LifecycleEventArgs $event
+     */
     public function prePersist(RecreationPark $recreationPark, LifecycleEventArgs $event)
     {
-
         $coordinates = $this->geocodingService->getCoordinates($recreationPark->getAddress() . ', ' . $recreationPark->getZipcode() . ' ' . $recreationPark->getCity());
         if (count($coordinates)) {
             $recreationPark->setLatitude($coordinates['latitude']);
