@@ -18,7 +18,6 @@ class GeocodingService
         HttpClientInterface $client
     )
     {
-        //todo: meilleurs moyen de récupérer l'env API_GEOCODING ??
         $this->apiGeocoding = $apiGeocoding;
         $this->client = $client;
     }

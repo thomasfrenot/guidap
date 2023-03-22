@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\RecreationParkRepository;
-use App\Service\GeocodingService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RecreationParkRepository::class)
@@ -21,55 +22,71 @@ class RecreationPark
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("recreation_park:read")
      */
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Activity::class, inversedBy="recreationParks")
+     * @ORM\ManyToMany(targetEntity=Activity::class, inversedBy="recreationParks" ,cascade={"persist"})
+     * @Groups("recreation_park:read")
      */
     private $activities;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("recreation_park:read")
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("recreation_park:read")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("recreation_park:read")
+     * @Assert\NotBlank()
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("recreation_park:read")
+     * @Assert\NotBlank()
      */
     private $city;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("recreation_park:read")
+     * @Assert\NotBlank()
+     * @Assert\Type("integer")
+     * @Assert\Length(5)
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("recreation_park:read")
+     * @Assert\NotBlank()
+     * @Assert\Url()
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("recreation_park:read")
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("recreation_park:read")
      */
     private $longitude;
-
-    private $geocodingService;
 
     public function __construct()
     {
@@ -189,7 +206,7 @@ class RecreationPark
         return $this;
     }
 
-    public function getLontitude(): ?string
+    public function getLongitude(): ?string
     {
         return $this->longitude;
     }
