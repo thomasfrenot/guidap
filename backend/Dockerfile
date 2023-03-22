@@ -44,7 +44,14 @@ RUN set -eux; \
     	zip \
     	apcu \
 		opcache \
+		pgsql \
     ;
+
+RUN set -ex \
+  && apk --no-cache add \
+    postgresql-dev
+
+RUN docker-php-ext-install pdo pdo_pgsql
 
 ###> recipes ###
 ###< recipes ###
@@ -66,14 +73,14 @@ RUN set -eux; \
 # copy sources
 COPY . ./
 
-RUN set -eux; \
-	mkdir -p var/cache var/log; \
-    if [ -f composer.json ]; then \
-		composer dump-autoload --classmap-authoritative --no-dev; \
-		composer dump-env prod; \
-		composer run-script --no-dev post-install-cmd; \
-		chmod +x bin/console; sync; \
-    fi
+#RUN set -eux; \
+#	mkdir -p var/cache var/log; \
+#    if [ -f composer.json ]; then \
+#		composer dump-autoload --classmap-authoritative --no-dev; \
+#		composer dump-env prod; \
+#		composer run-script --no-dev post-install-cmd; \
+#		chmod +x bin/console; sync; \
+#   fi
 
 RUN apk add --no-cache bash && \
     curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
