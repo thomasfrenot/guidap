@@ -28,6 +28,10 @@ services:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: App\Entity\RecreationPark }
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: App\Entity\RecreationPark }
+    App\EntityListener\ActivityEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: App\Entity\Activity }
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: App\Entity\Activity }
 
     App\Service\GeocodingService:
         arguments:
