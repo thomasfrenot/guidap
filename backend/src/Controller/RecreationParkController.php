@@ -6,6 +6,7 @@ use App\Entity\RecreationPark;
 use App\Repository\ActivityRepository;
 use App\Repository\RecreationParkRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +24,29 @@ class RecreationParkController extends AbstractController
      * @Route("/api/recreation-parks", name="recreation_park_list", methods={"GET"})
      */
     public function listRecreationPark(
+        Request $request,
         RecreationParkRepository $recreationParkRepository,
         SerializerInterface $serializer
     ): JsonResponse
     {
-        $recreationParks = $recreationParkRepository->findAll();
-        $jsonData = $serializer->serialize($recreationParks, 'json', ['groups' => 'recreation_park:read']);
+        $defaultLimit = 2;
+
+        $page = $request->get('page', 1) - 1; // remove 1 for human page 1 to page 0 sql
+        $limit = $request->get('limit', $defaultLimit);
+        $search = $request->get('search');
+        $activities = $request->get('activities') ? explode(',', $request->get('activities')) : [];
+
+        $recreationParks = $recreationParkRepository->findWithSearchAndPaginator($page, $limit, $search, $activities);
+
+        $jsonData = $serializer->serialize([
+                'totalPages' => round(count($recreationParks) / $defaultLimit),
+                'totalResults' => count($recreationParks),
+                'results' => $recreationParks
+            ],
+            'json',
+            ['groups' => 'recreation_park:read']
+        );
+
         return new JsonResponse($jsonData, Response::HTTP_OK, [], true);
     }
 
@@ -90,11 +108,21 @@ class RecreationParkController extends AbstractController
         Request $request,
         SerializerInterface $serializer,
         ActivityRepository $activityRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
     ): JsonResponse
     {
         $updatedRecreationPark = $serializer->deserialize($request->getContent(), RecreationPark::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $recreationPark]);
         $body = $request->toArray();
+
+        $errors = $validator->validate($updatedRecreationPark);
+        if (0 < count($errors)) {
+            $messages = [];
+            foreach ($errors as $violation) {
+                $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+            }
+            throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $serializer->serialize($messages, 'json'));
+        }
 
         if (true === array_key_exists('activityIds', $body)) {
             // remove old activities

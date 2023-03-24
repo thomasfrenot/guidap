@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\RecreationPark;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,21 +22,38 @@ class RecreationParkRepository extends ServiceEntityRepository
         parent::__construct($registry, RecreationPark::class);
     }
 
-    public function add(RecreationPark $entity, bool $flush = false): void
+    /**
+     * Get recreation park by page of limited results
+     * @param $page
+     * @param $maxResults
+     * @return int|mixed|string
+     */
+    public function findWithSearchAndPaginator( $page, $limit = 2, $search = null, $filterActivities = []): Paginator
     {
-        $this->getEntityManager()->persist($entity);
+        // 10 results by page
+        $query = $this->createQueryBuilder('rp')
+            ->setFirstResult(($page) * $limit)
+            ->setMaxResults($limit);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        if (null !== $search) {
+            $query->andWhere($query->expr()->orX(
+                $query->expr()->like('rp.name', ':search'),
+                $query->expr()->like('rp.slug', ':search'),
+                $query->expr()->like('rp.description', ':search')
+            ))
+                ->setParameter('search', '%'.trim($search).'%');
         }
-    }
 
-    public function remove(RecreationPark $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        if (0 < count($filterActivities)) {
+            $query
+                ->innerJoin('rp.activities', 'a')
+                ->andWhere($query->expr()->orX(
+                    'a.slug IN (:filterActivities)',
+                    'a.name IN (:filterActivities)'
+                ))
+                ->setParameter('filterActivities', $filterActivities);
         }
+
+        return new Paginator($query);
     }
 }
