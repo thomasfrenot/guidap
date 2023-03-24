@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
@@ -32,6 +33,12 @@ class Activity
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Groups("recreation_park:read")
+     */
+    private $slug;
+
+    /**
      * @ORM\ManyToMany(targetEntity=RecreationPark::class, mappedBy="activities")
      */
     private $recreationParks;
@@ -39,6 +46,11 @@ class Activity
     public function __construct()
     {
         $this->recreationParks = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -56,6 +68,25 @@ class Activity
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function computeSlug(SluggerInterface $slugger)
+    {
+        if (!$this->slug || '-' === $this->slug) {
+            $this->slug = (string) $slugger->slug((string) $this)->lower();
+        }
     }
 
     /**
