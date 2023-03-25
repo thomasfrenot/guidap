@@ -23,12 +23,14 @@ class GeocodingService
     }
 
     /**
-     * @param string $search address search for geocoding
+     * Get geocoding for givem address
+     *
+     * @param string $address address search for geocoding
      * @return array
      */
-    public function getCoordinates($search) :array
+    public function getCoordinates($address) :array
     {
-        $geocodingUrl = self::APIURL.self::ENDPOINT.'/'.urlencode($search).'.json?access_token='.$this->apiGeocoding;
+        $geocodingUrl = self::APIURL.self::ENDPOINT.'/'.urlencode($address).'.json?access_token='.$this->apiGeocoding;
         $client = HttpClient::create();
         $response = $client->request('GET', $geocodingUrl);
 

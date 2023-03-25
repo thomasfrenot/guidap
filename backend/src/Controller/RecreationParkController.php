@@ -6,6 +6,9 @@ use App\Entity\RecreationPark;
 use App\Repository\ActivityRepository;
 use App\Repository\RecreationParkRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +23,38 @@ class RecreationParkController extends AbstractController
 {
     /**
      * @Route("/api/recreation-parks", name="recreation_park_list", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns recreation parks",
+     *     @OA\JsonContent(
+     *         type="array",
+     *         @OA\Items(ref=@Model(type=RecreationPark::class, groups={"recreation_park:read"}))
+     *     )
+     * )
+     * @OA\Parameter(
+     *     name="search",
+     *     in="query",
+     *     description="Search in name or description",
+     *     @OA\Schema(type="string")
+     * )
+     * @OA\Parameter(
+     *     name="activities",
+     *     in="query",
+     *     description="Search by one or more activities, put slug separated by a comma, ex: `canoe,wakboard`",
+     *     @OA\Schema(type="string")
+     * )
+     * @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="Get results for page",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="Limit results returned, default limit is 2 items",
+     *     @OA\Schema(type="integer")
+     * )
      */
     public function listRecreationPark(
         Request $request,
@@ -37,9 +72,9 @@ class RecreationParkController extends AbstractController
         $recreationParks = $recreationParkRepository->findWithSearchAndPaginator($page, $limit, $search, $activities);
 
         $jsonData = $serializer->serialize([
-                'totalPages' => round(count($recreationParks) / $defaultLimit),
+                'totalPages' => round(count($recreationParks) / $limit),
                 'totalResults' => count($recreationParks),
-                'results' => $recreationParks
+                'results' => $recreationParks,
             ],
             'json',
             ['groups' => 'recreation_park:read']
@@ -50,6 +85,26 @@ class RecreationParkController extends AbstractController
 
     /**
      * @Route("/api/recreation-parks", name="recreation_park_create", methods={"POST"})
+     * @OA\Response(
+     *     response=201,
+     *     description="Create new recreation park",
+     *     @Model(type=RecreationPark::class, groups={"recreation_park:read"})
+     * )
+     * @OA\Post(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="activityIds", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="address", type="string"),
+     *             @OA\Property(property="city", type="string"),
+     *             @OA\Property(property="zipcode", type="integer"),
+     *             @OA\Property(property="website", type="string")
+     *         )
+     *     )
+     * )
+     * @Security(name="Bearer")
      */
     public function createRecreationPark(
         Request $request,
@@ -87,19 +142,27 @@ class RecreationParkController extends AbstractController
     }
 
     /**
-     * @Route("/api/recreation-parks/{id}", name="recreation_park_read", methods={"GET"})
-     */
-    public function readRecreationPark(
-        RecreationPark $recreationPark,
-        SerializerInterface $serializer
-    ): JsonResponse
-    {
-        $jsonData = $serializer->serialize($recreationPark, 'json', ['groups' => 'recreation_park:read']);
-        return new JsonResponse($jsonData, Response::HTTP_OK, ['accept' => 'json'], true);
-    }
-
-    /**
      * @Route("/api/recreation-parks/{id}", name="recreation_park_update", methods={"PUT"})
+     * @OA\Response(
+     *     response=201,
+     *     description="Create new recreation park",
+     *     @Model(type=RecreationPark::class, groups={"recreation_park:read"})
+     * )
+     * @OA\Put(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="activityIds", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="address", type="string"),
+     *             @OA\Property(property="city", type="string"),
+     *             @OA\Property(property="zipcode", type="integer"),
+     *             @OA\Property(property="website", type="string")
+     *         )
+     *     )
+     * )
+     * @Security(name="Bearer")
      */
     public function updateRecreationPark(
         RecreationPark $recreationPark,
@@ -145,6 +208,7 @@ class RecreationParkController extends AbstractController
 
     /**
      * @Route("/api/recreation-parks/{id}", name="recreation_park_delete", methods={"DELETE"})
+     * @Security(name="Bearer")
      */
     public function deleteRecreationPark(RecreationPark $recreationPark, EntityManagerInterface $em)
     {

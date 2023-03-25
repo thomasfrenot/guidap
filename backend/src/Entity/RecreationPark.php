@@ -35,7 +35,7 @@ class RecreationPark
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -48,27 +48,27 @@ class RecreationPark
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      * @Assert\NotBlank()
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      * @Assert\NotBlank()
      */
     private $city;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      * @Assert\NotBlank()
      * @Assert\Type("integer")
      * @Assert\Length(5)
@@ -77,7 +77,7 @@ class RecreationPark
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("recreation_park:read")
+     * @Groups({"recreation_park:read", "recreation_park:create"})
      * @Assert\NotBlank()
      * @Assert\Url()
      */
