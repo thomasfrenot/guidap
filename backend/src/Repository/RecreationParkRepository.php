@@ -37,11 +37,11 @@ class RecreationParkRepository extends ServiceEntityRepository
 
         if (null !== $search) {
             $query->andWhere($query->expr()->orX(
-                $query->expr()->like('rp.name', ':search'),
+                $query->expr()->like('upper(rp.name)', 'upper(:search)'),
                 $query->expr()->like('rp.slug', ':search'),
-                $query->expr()->like('rp.description', ':search')
+                $query->expr()->like('upper(rp.description)', 'upper(:search)')
             ))
-                ->setParameter('search', '%'.trim($search).'%');
+                ->setParameter('search', '%'.$search.'%');
         }
 
         if (0 < count($filterActivities)) {

@@ -1,13 +1,14 @@
 <template>
   <header>
-    <h1>Guidap test</h1>
+    <img src="https://media.glassdoor.com/sql/2405674/guidap-squarelogo-1635507503270.png"/>
+    <h1>Test technique</h1>
   </header>
   <div id="map" />
-  <div class="flex">
-    <InputText type="text" v-model="searchString" @input="handleSearch"></InputText>
-    <MultiSelect @change="changeActivities" v-model="selectedActivities" display="chip" :options="activities" optionValue="slug" optionLabel="name" placeholder="Select activities" :maxSelectedLabels="3" />
+  <div class="filters">
+    <InputText type="text" placeholder="Recherche par nom ou description" v-model="searchString" @input="handleSearch"></InputText>
+    <MultiSelect class="select" @change="changeActivities" v-model="selectedActivities" :options="activities" optionValue="slug" optionLabel="name" placeholder="Filtre par activité" :maxSelectedLabels="3" />
   </div>
-  <div class="flex" v-if="this.recreationParks?.results?.length">
+  <div class="cards" v-if="this.recreationParks?.results?.length">
     <Card v-for="recreationPark in this.recreationParks?.results">
       <template #title> {{ recreationPark.name }} </template>
       <template #content>

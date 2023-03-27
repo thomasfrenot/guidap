@@ -8,7 +8,26 @@ body, #app, body .p-component {
     height: 350px;
 }
 
-.flex {
+header {
+    display: flex;
+    align-items: center;
+    img {
+        margin-right: 1rem;;
+    }
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    input {
+        flex-grow: 1;
+    }
+    .select {
+        width: 200px;
+    }
+}
+
+.cards {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
