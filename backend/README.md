@@ -2,19 +2,25 @@
 * Install [Docker (v20.10+)](https://docs.docker.com/engine/install/)
 * Install [Docker Compose (v2.10+)](https://docs.docker.com/compose/install/)
 
-# Install the project for the first time
-1. Run `docker-compose build`
-2. Run `docker run -it --rm -v $PWD:/srv/app coding-assessment-php_symfony /bin/sh -c 'composer install'`
-
 # Configuration environnement
 ajoute le fichier .env.local avec les éléments suivants configurés :
 ```
+DATABASE_URL=postgresql://user:password@postgres:5432/database?serverVersion=12
 API_GEOCODING=YOUR_MAPBOX_API_KEY
 JWT_PASSPHRASE=A_SECRET_PASSPHRASE
 ```
+
+# Install the project for the first time
+1. Run `docker-compose build`
+2. Run `docker exec -it coding-assessment-php_symfony bash -c 'composer install'`
+
+# Create database and load fixture
+1. Run ` docker exec -it coding-assessment-php_symfony bash -c 'php bin/console doctrine:schema:create'`
+2. Run `docker exec -it coding-assessment-php_symfony bash -c 'php bin/console doctrine:fixtures:load -n'`
+
 # Start the project
 1. Run `docker-compose up -d`
-2. Go to API Doc http://localhost:8080/apidoc or http://localhost:8080/apidoc.json
+2. Go to API Doc http://localhost:8000/apidoc or http://localhost:8000/apidoc.json
 
 # Stopping all the containers
 1. Ctrl+C when the containers are running
