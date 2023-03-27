@@ -1,23 +1,7 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { Marker, Map, Popup } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { onMounted } from "vue";
 
 export default {
-  setup() {
-    onMounted(() => {
-      mapboxgl.accessToken = "pk.eyJ1IjoidGhvbWFzZnJlbm90IiwiYSI6ImNsZmJucGgzajBnb3IzcW4xbnN2b2F2dGsifQ.0aTnTeGPxyuz_rS9gpCq1A";
-
-      new mapboxgl.Map({
-        container: "map",
-        style: "mapbox://styles/mapbox/light-v9",
-        center: [2.1, 47.1],
-        zoom: 4
-      });
-
-      return {};
-    })
-  },
-
   data() {
     return {
       loading: true,
@@ -25,11 +9,21 @@ export default {
       searchString: '',
       selectedActivities: [],
       activities: [{name: "Wakeboard", id: 191}, {name: "Kayak", id: 192}],
-      aborter: null
+      aborter: null,
+      markers: []
     }
   },
 
   mounted() {
+    mapboxgl.accessToken = "pk.eyJ1IjoidGhvbWFzZnJlbm90IiwiYSI6ImNsZmJucGgzajBnb3IzcW4xbnN2b2F2dGsifQ.0aTnTeGPxyuz_rS9gpCq1A";
+
+    this.map = new Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/light-v9",
+      center: [2.1, 47.1],
+      zoom: 4
+    });
+
     this.getRecreationParks();
     this.getActivities();
   },
@@ -63,11 +57,26 @@ export default {
               throw new Error(message);
           }
 
-          setTimeout(async () => {
-            this.recreationParks = await response.json();
-            this.loading = false;
-          }, 500)
+          this.recreationParks = await response.json();
+          this.loading = false;         
           
+          this.markers.map(m => m.remove());
+          this.recreationParks.results.map(rp => {
+            const popup = new Popup()
+              .setHTML(`<h3>${rp.name}</h3><p>${rp.description}</p><p><a href="${rp.website}">Accéder au site web</a></p>`);
+              popup.on('open', () => {
+                
+              })
+
+            const marker = new Marker({
+              color: "#fbbd0b"
+            })
+              .setLngLat([rp.latitude, rp.longitude])
+              .setPopup(popup)
+              .addTo(this.map);
+
+            this.markers.push(marker);
+          })
         } catch (error) {
           console.error(error);
         }
@@ -86,6 +95,14 @@ export default {
         }
 
         this.activities = await response.json();
+    },
+
+    /**
+     * Trigger click tag
+     */
+    clickTag(activitySlug) {
+      this.selectedActivities = [activitySlug];
+      this.getRecreationParks();
     },
 
     /**

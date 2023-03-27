@@ -34,12 +34,16 @@
         {{ recreationPark.name }}
       </template>
       <template #content>
-        <p>{{ recreationPark.description || '...' }}</p>
+        <p>
+          {{ recreationPark.description || '...' }}
+        </p>
+        <p><a href="{{ recreationPark.website }}">Accéder au site web</a></p>
       </template>
       <template #footer>
         <PrimeTag
           v-for="activity in recreationPark.activities"
           :key="activity.id"
+          @click="clickTag(activity.slug)"
         >
           {{ activity.slug }}
         </PrimeTag>
