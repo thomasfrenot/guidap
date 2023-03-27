@@ -27,3 +27,6 @@ npm run build
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Run linter 
+`./node_modules/.bin/eslint --ext .js,.vue src`

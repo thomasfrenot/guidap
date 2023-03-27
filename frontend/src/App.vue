@@ -1,25 +1,66 @@
 <template>
   <header>
-    <img src="https://media.glassdoor.com/sql/2405674/guidap-squarelogo-1635507503270.png"/>
+    <img src="https://guidap.com/wp-content/uploads/2018/07/cropped-200-px-blanc-signature-mail-1-1.png">
     <h1>Test technique</h1>
   </header>
   <div id="map" />
   <div class="filters">
-    <InputText type="text" placeholder="Recherche par nom ou description" v-model="searchString" @input="handleSearch"></InputText>
-    <MultiSelect class="select" @change="changeActivities" v-model="selectedActivities" :options="activities" optionValue="slug" optionLabel="name" placeholder="Filtre par activité" :maxSelectedLabels="3" />
+    <InputText
+      v-model="searchString"
+      type="text"
+      placeholder="Recherche par nom ou description"
+      @input="handleSearch"
+    />
+    <MultiSelect
+      v-model="selectedActivities"
+      class="select"
+      :options="activities"
+      option-value="slug"
+      option-label="name"
+      placeholder="Filtre par activité"
+      :max-selected-labels="3"
+      @change="changeActivities"
+    />
   </div>
-  <div class="cards" v-if="this.recreationParks?.results?.length">
-    <Card v-for="recreationPark in this.recreationParks?.results">
-      <template #title> {{ recreationPark.name }} </template>
+  <div
+    v-if="recreationParks?.results?.length"
+    class="cards"
+  >
+    <PrimeCard
+      v-for="recreationPark in recreationParks?.results"
+      :key="recreationPark.slug"
+    >
+      <template #title>
+        {{ recreationPark.name }}
+      </template>
       <template #content>
-          <p>{{ recreationPark.description || '...' }}</p>
+        <p>{{ recreationPark.description || '...' }}</p>
       </template>
       <template #footer>
-          <Tag v-for="activity in recreationPark.activities">{{ activity.name }}</Tag>
+        <PrimeTag
+          v-for="activity in recreationPark.activities"
+          :key="activity.id"
+        >
+          {{ activity.slug }}
+        </PrimeTag>
       </template>
-    </Card>
+    </PrimeCard>
   </div>
-  <div class="flex center" v-else>Aucun centre de loisir trouvé pour votre recherche</div>
+  <div
+    v-else
+    class="cards-empty"
+  >
+    <div v-if="loading">
+      <ProgressSpinner
+        style="width: 50px; height: 50px;"
+        stroke-width="5"
+        fill="#fbbd0b"
+      />
+    </div>
+    <div v-else>
+      Aucun résultat
+    </div>
+  </div>
 </template>
 <script src="./App.js"></script>
 <style src="./App.scss"></style>

@@ -23,7 +23,7 @@ header {
         flex-grow: 1;
     }
     .select {
-        width: 200px;
+        width: 250px;
     }
 }
 
@@ -32,9 +32,13 @@ header {
     flex-wrap: wrap;
     align-items: stretch;
     .p-card {
-        width: 45%;
+        width: 31.3%;
         max-height: 250px;
-        margin: 2rem 1rem 0;
+        margin: 2rem 3% 0 0;
+
+        &:nth-child(3) {
+            margin-right: 0;
+        }
 
         .p-card-body {
             flex-flow: column nowrap;
@@ -57,6 +61,7 @@ header {
                 &:first-child {
                     margin-left: 0;
                 }
+                background-color: #fbbd0b;
             }
         }
 
@@ -69,5 +74,11 @@ header {
             overflow: hidden;
             text-overflow: ellipsis;
         }
+    }
+
+    &-empty {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
     }
 }
