@@ -8,10 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "mapbox-gl": "^2.13.0",
+    "primeicons": "^6.0.1",
+    "primevue": "^3.26.0",
     "vue": "^3.2.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.2.1",
     "vite": "^4.1.4"
   }
 }
