@@ -72,7 +72,7 @@ class RecreationParkController extends AbstractController
         $recreationParks = $recreationParkRepository->findWithSearchAndPaginator($page, $limit, $search, $activities);
 
         $jsonData = $serializer->serialize([
-                'totalPages' => round(count($recreationParks) / $limit),
+                'totalPages' => ceil(count($recreationParks) / $limit),
                 'totalResults' => count($recreationParks),
                 'results' => $recreationParks,
             ],
