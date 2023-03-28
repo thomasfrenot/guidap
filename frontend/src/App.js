@@ -29,7 +29,7 @@ export default {
   },
 
   mounted() {
-    mapboxgl.accessToken = "pk.eyJ1IjoidGhvbWFzZnJlbm90IiwiYSI6ImNsZmJucGgzajBnb3IzcW4xbnN2b2F2dGsifQ.0aTnTeGPxyuz_rS9gpCq1A";
+    mapboxgl.accessToken = import.meta.env.VITE_API_GEOCODING;
 
     this.map = new Map({
       container: "map",
@@ -77,7 +77,7 @@ export default {
 
           this.markers.map(m => m.remove());
           this.recreationParks = [...this.recreationParks, ...data.results];
-          this.recreationParks.map(rp => {          
+          this.recreationParks.map(rp => {
             const popup = new Popup()
             .setHTML(`<h3>${rp.name}</h3><p>${rp.description}</p><p><a href="${rp.website}">Accéder au site web</a></p>`);
             rp.popup = popup;
@@ -91,12 +91,12 @@ export default {
 
             this.popups.push(popup);
             this.markers.push(marker);
-            rp.marker = marker;        
+            rp.marker = marker;
           })
         } catch (error) {
           console.error(error);
         }
-        
+
     },
 
     /**
@@ -145,7 +145,7 @@ export default {
     },
 
     /**
-     * Trigger for input search 
+     * Trigger for input search
      */
     handleSearch() {
         if (2 < this.searchString.length || 0 === this.searchString.length) {
@@ -154,7 +154,7 @@ export default {
           this.getRecreationParks();
         }
     },
-    
+
     /**
      * Trigger for activities select change
      */
