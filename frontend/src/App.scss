@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+body {
+    max-width: 920px;
+    margin: 0 auto;
+}
 body, #app, body .p-component {
     font-family: 'Montserrat', sans-serif;
 } 
@@ -26,18 +30,26 @@ header {
         width: 250px;
     }
 }
-
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
 .cards {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
+    width: 100%;
     .p-card {
-        width: 31.3%;
+        width: 47%;
         max-height: 250px;
-        margin: 2rem 3% 0 0;
+        margin: 2rem 20px 0 15px;
 
-        &:nth-child(3) {
+        &:nth-child(even) {
             margin-right: 0;
+            margin-left: 0;
         }
 
         .p-card-body {

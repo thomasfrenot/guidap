@@ -22,47 +22,54 @@
       @change="changeActivities"
     />
   </div>
-  <div
-    v-if="recreationParks?.results?.length"
-    class="cards"
-  >
-    <PrimeCard
-      v-for="recreationPark in recreationParks?.results"
-      :key="recreationPark.slug"
+  <div class="wrapper">
+    <div
+      v-if="recreationParks?.length"
+      class="cards"
     >
-      <template #title>
-        {{ recreationPark.name }}
-      </template>
-      <template #content>
-        <p>
-          {{ recreationPark.description || '...' }}
-        </p>
-        <p><a href="{{ recreationPark.website }}">Accéder au site web</a></p>
-      </template>
-      <template #footer>
-        <PrimeTag
-          v-for="activity in recreationPark.activities"
-          :key="activity.id"
-          @click="clickTag(activity.slug)"
-        >
-          {{ activity.slug }}
-        </PrimeTag>
-      </template>
-    </PrimeCard>
-  </div>
-  <div
-    v-else
-    class="cards-empty"
-  >
-    <div v-if="loading">
-      <ProgressSpinner
-        style="width: 50px; height: 50px;"
-        stroke-width="5"
-        fill="#fbbd0b"
-      />
+      <PrimeCard
+        v-for="recreationPark in recreationParks"
+        :key="recreationPark.slug"
+        @click="openMarkerPopup(recreationPark)"
+      >
+        <template #title>
+          {{ recreationPark.name }}
+        </template>
+        <template #content>
+          <p>
+            {{ recreationPark.description || '...' }}
+          </p>
+          <p><a href="{{ recreationPark.website }}">Accéder au site web</a></p>
+        </template>
+        <template #footer>
+          <PrimeTag
+            v-for="activity in recreationPark.activities"
+            :key="activity.id"
+            @click="clickTag(activity.slug)"
+          >
+            {{ activity.slug }}
+          </PrimeTag>
+        </template>
+      </PrimeCard>
     </div>
-    <div v-else>
-      Aucun résultat
+    <div
+      v-if="0 === recreationParks.length && false === loading"
+      class="cards-empty"
+    >
+      <div>
+        Aucun résultat
+      </div>
+    </div>
+    <div
+      class="cards-empty"
+    >
+      <div v-if="loading">
+        <ProgressSpinner
+          style="width: 50px; height: 50px;"
+          stroke-width="5"
+          fill="#fbbd0b"
+        />
+      </div>
     </div>
   </div>
 </template>

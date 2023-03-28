@@ -44,8 +44,8 @@ class AppFixtures extends Fixture
         $recreationPark = new RecreationPark();
         $recreationPark->setName('Wam Park');
         $recreationPark->setAddress('Base de Loisirs Sesquières, All. des Foulques');
-        $recreationPark->setCity('Toulouse');
-        $recreationPark->setZipcode(31200);
+        $recreationPark->setCity('Rennes');
+        $recreationPark->setZipcode(39000);
         $recreationPark->setDescription('Viens faire du wakeboard à Toulouse');
         $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
         $recreationPark->addActivity($this->getReference('Wakeboard'));
@@ -54,8 +54,8 @@ class AppFixtures extends Fixture
         $recreationPark = new RecreationPark();
         $recreationPark->setName('Wam Park 2');
         $recreationPark->setAddress('Ici on s\éclate avec des bolides à pagaie');
-        $recreationPark->setCity('Toulouse');
-        $recreationPark->setZipcode(31200);
+        $recreationPark->setCity('Lille');
+        $recreationPark->setZipcode(59000);
         $recreationPark->setDescription('Allez viens !');
         $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
         $recreationPark->addActivity($this->getReference('Canoë'));
@@ -63,6 +63,26 @@ class AppFixtures extends Fixture
 
         $recreationPark = new RecreationPark();
         $recreationPark->setName('Wam Park 3');
+        $recreationPark->setAddress('Base de Loisirs');
+        $recreationPark->setCity('Lyon');
+        $recreationPark->setZipcode(69000);
+        $recreationPark->setDescription('Viens faire du wakeboard à Toulouse');
+        $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
+        $recreationPark->addActivity($this->getReference('Wakeboard'));
+        $manager->persist($recreationPark);
+
+        $recreationPark = new RecreationPark();
+        $recreationPark->setName('Wam Park 4');
+        $recreationPark->setAddress('Base de Loisirs');
+        $recreationPark->setCity('Bordeaux');
+        $recreationPark->setZipcode(33000);
+        $recreationPark->setDescription('Viens faire du wakeboard à Toulouse');
+        $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
+        $recreationPark->addActivity($this->getReference('Wakeboard'));
+        $manager->persist($recreationPark);
+
+        $recreationPark = new RecreationPark();
+        $recreationPark->setName('Wam Park 5');
         $recreationPark->setAddress('Base de Loisirs Sesquières, All. des Foulques');
         $recreationPark->setCity('Toulouse');
         $recreationPark->setZipcode(31200);
@@ -72,13 +92,23 @@ class AppFixtures extends Fixture
         $manager->persist($recreationPark);
 
         $recreationPark = new RecreationPark();
-        $recreationPark->setName('Wam Park 4');
-        $recreationPark->setAddress('Base de Loisirs Sesquières, All. des Foulques');
-        $recreationPark->setCity('Toulouse');
-        $recreationPark->setZipcode(31200);
-        $recreationPark->setDescription('Viens faire du wakeboard à Toulouse');
+        $recreationPark->setName('Wam Park §');
+        $recreationPark->setAddress('rue monmartre');
+        $recreationPark->setCity('Paris');
+        $recreationPark->setZipcode(75000);
+        $recreationPark->setDescription('Viens faire du wakeboard');
         $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
         $recreationPark->addActivity($this->getReference('Wakeboard'));
+        $manager->persist($recreationPark);
+
+        $recreationPark = new RecreationPark();
+        $recreationPark->setName('Wam Park 3');
+        $recreationPark->setAddress('Base de Loisirs');
+        $recreationPark->setCity('Marseille');
+        $recreationPark->setZipcode(06000);
+        $recreationPark->setDescription('Viens faire');
+        $recreationPark->setWebsite('https://www.wampark.fr/toulouse-sesquieres/toulouse-sesquieres-tarifs/');
+        $recreationPark->addActivity($this->getReference('Paintball'));
         $manager->persist($recreationPark);
 
         /* Users */
