@@ -8,6 +8,12 @@ This template should help get you started developing with Vue 3.
 npm install
 ```
 
+# Configuration environnement
+ajoute le fichier .env.local avec les éléments suivants configurés :
+```
+VITE_API_GEOCODING=YOUR_MAPBOX_API_KEY
+```
+
 ### Compile and Hot-Reload for Development
 
 ```sh

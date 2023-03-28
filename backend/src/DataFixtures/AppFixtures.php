@@ -92,7 +92,7 @@ class AppFixtures extends Fixture
         $manager->persist($recreationPark);
 
         $recreationPark = new RecreationPark();
-        $recreationPark->setName('Wam Park §');
+        $recreationPark->setName('Wam Park 6');
         $recreationPark->setAddress('rue monmartre');
         $recreationPark->setCity('Paris');
         $recreationPark->setZipcode(75000);
@@ -102,7 +102,7 @@ class AppFixtures extends Fixture
         $manager->persist($recreationPark);
 
         $recreationPark = new RecreationPark();
-        $recreationPark->setName('Wam Park 3');
+        $recreationPark->setName('Base de loisir');
         $recreationPark->setAddress('Base de Loisirs');
         $recreationPark->setCity('Marseille');
         $recreationPark->setZipcode(06000);
